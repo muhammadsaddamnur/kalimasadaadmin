@@ -14,6 +14,7 @@ class DetailPesanan extends StatefulWidget {
 
 class _DetailPesananState extends State<DetailPesanan> {
   fb.DatabaseReference ref;
+  fb.DataSnapshot testa;
   int _selectedIndex = 0;
   List<String> _listKonfirmasi = [
     'Menunggu Pembayaran',
@@ -35,13 +36,19 @@ class _DetailPesananState extends State<DetailPesanan> {
   }
 
   test() async {
-    var a = fb
-        .database()
-        .ref("pesanan")
-        .child(widget.firebaseKey)
-        .child("purchase_status")
-        .onValue;
-    debugPrint(a.toString());
+    ref = fb.database().ref("pesanan").child(widget.firebaseKey);
+    // .child("purchase_status");
+    ref.onValue.listen((event) {
+      var datasnapshot = event.snapshot;
+      testa = datasnapshot;
+      _konfirmasi = testa.val()["purchase_status"].toString();
+      debugPrint(testa.val()["purchase_status"].toString());
+    });
+    // _messagesRef = _database.reference().child("produk");
+    // testa.onValue.once().then((DataSnapshot snapshot) {
+    //   debugPrint(snapshot.value.toString());
+    // });
+    // debugPrint(a.toString());
   }
 
   @override
@@ -226,19 +233,21 @@ class _DetailPesananState extends State<DetailPesanan> {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  // DropdownButton(
-                                  //   value: _konfirmasi,
-                                  //   items: _listKonfirmasi
-                                  //       .map((value) => new DropdownMenuItem(
-                                  //           value: value,
-                                  //           child: new Text(value)))
-                                  //       .toList(),
-                                  //   onChanged: (value) {
-                                  //     setState(() {
-                                  //       _konfirmasi = value;
-                                  //     });
-                                  //   },
-                                  // )
+                                  DropdownButton(
+                                    value: _konfirmasi,
+                                    items: _listKonfirmasi
+                                        .map((value) => new DropdownMenuItem(
+                                            value: value,
+                                            child: new Text(value)))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _konfirmasi = value;
+                                        ref.update(
+                                            {"purchase_status": "$value"});
+                                      });
+                                    },
+                                  )
                                 ],
                               ),
                             )),
