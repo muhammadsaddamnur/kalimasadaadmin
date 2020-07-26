@@ -19,6 +19,8 @@ class _DetailPesananState extends State<DetailPesanan> {
   List<String> _listKonfirmasi = [
     'Menunggu Pembayaran',
     'Menunggu Konfirmasi Pembayaran',
+    'Pesanan Diproses',
+    'Pesanan Selesai',
   ];
   String _konfirmasi = '';
 

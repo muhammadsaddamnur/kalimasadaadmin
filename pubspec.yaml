@@ -24,6 +24,10 @@ dependencies:
   intl: ^0.16.1
   firebase: ^7.3.0
   url_launcher: ^5.5.0
+  adobe_xd: ^0.1.4
+  universal_html: ^1.2.3
+  image_picker_web: ^1.0.9
+  mime_type: ^0.3.2
   flutter:
     sdk: flutter
 

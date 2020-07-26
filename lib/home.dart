@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase/firebase.dart' as fb;
 import 'package:kalimasadaadmin/detailpesanan.dart';
 import 'package:kalimasadaadmin/listpesanan.dart';
+import 'package:kalimasadaadmin/member.dart';
+import 'package:kalimasadaadmin/produk.dart';
 import 'package:kalimasadaadmin/tambahproduk.dart';
 
 class Home extends StatefulWidget {
@@ -38,6 +40,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Kalimasa Admin'),
+        actions: [],
       ),
       body: Row(
         children: [
@@ -58,7 +61,12 @@ class _HomeState extends State<Home> {
               NavigationRailDestination(
                 icon: Icon(Icons.add),
                 selectedIcon: Icon(Icons.add),
-                label: Text('Tambah Produk'),
+                label: Text('Produk'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.person),
+                selectedIcon: Icon(Icons.person),
+                label: Text('Member'),
               ),
               NavigationRailDestination(
                 icon: Icon(Icons.exit_to_app),
@@ -67,7 +75,9 @@ class _HomeState extends State<Home> {
               ),
             ],
           ),
-          _selectedIndex == 0 ? ListPesanan() : TambahProduk()
+          _selectedIndex == 0
+              ? ListPesanan()
+              : _selectedIndex == 1 ? Produk() : Member()
         ],
       ),
     );
