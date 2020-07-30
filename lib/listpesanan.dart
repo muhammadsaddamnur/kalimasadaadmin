@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase/firebase.dart' as fb;
+import 'package:kalimasadaadmin/core/vigenerecipher.dart';
 
 import 'detailpesanan.dart';
 
@@ -36,7 +37,10 @@ class _ListPesananState extends State<ListPesanan> {
   Widget build(BuildContext context) {
     return Expanded(
       child: StreamBuilder(
-          stream: ref.onValue,
+          stream: ref
+              // .orderByChild("purchase_status")
+              // .equalTo("¯ÆÒç×àÈÝ¬ÓàÏâÓÕÃÔÍ¹ÞÎÊÃÚÅäÊç")
+              .onValue,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               Map<dynamic, dynamic> map = snapshot.data.snapshot.val();
@@ -48,15 +52,22 @@ class _ListPesananState extends State<ListPesanan> {
                       padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
                       child: Card(
                         child: ListTile(
-                          title: Text(map.values
-                              .toList()[index]['team_name']
-                              .toString()),
-                          subtitle: Text(
-                              map.values.toList()[index]['email'].toString() +
-                                  ' - ' +
+                          title: Text(VigenereCipher.decrypt(
+                              map.values
+                                  .toList()[index]['team_name']
+                                  .toString(),
+                              'badriyah')),
+                          subtitle: Text(VigenereCipher.decrypt(
+                                  map.values
+                                      .toList()[index]['email']
+                                      .toString(),
+                                  'badriyah') +
+                              ' - ' +
+                              VigenereCipher.decrypt(
                                   map.values
                                       .toList()[index]['purchase_status']
-                                      .toString()),
+                                      .toString(),
+                                  'badriyah')),
                           onTap: () {
                             debugPrint(key[index].toString());
                             Navigator.push(

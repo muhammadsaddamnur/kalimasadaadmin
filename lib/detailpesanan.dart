@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase/firebase.dart' as fb;
+import 'package:kalimasadaadmin/core/vigenerecipher.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:js' as js;
 
@@ -43,7 +44,8 @@ class _DetailPesananState extends State<DetailPesanan> {
     ref.onValue.listen((event) {
       var datasnapshot = event.snapshot;
       testa = datasnapshot;
-      _konfirmasi = testa.val()["purchase_status"].toString();
+      _konfirmasi = VigenereCipher.decrypt(
+          testa.val()["purchase_status"].toString(), 'badriyah');
       debugPrint(testa.val()["purchase_status"].toString());
     });
     // _messagesRef = _database.reference().child("produk");
@@ -79,8 +81,10 @@ class _DetailPesananState extends State<DetailPesanan> {
                           children: [
                             Text('Nama Team'),
                             Text(
-                              snapshot.data.snapshot.val()[widget.firebaseKey]
-                                  ['team_name'],
+                              VigenereCipher.decrypt(
+                                  snapshot.data.snapshot
+                                      .val()[widget.firebaseKey]['team_name'],
+                                  'badriyah'),
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
@@ -89,8 +93,10 @@ class _DetailPesananState extends State<DetailPesanan> {
                             ),
                             Text('Email'),
                             Text(
-                              snapshot.data.snapshot.val()[widget.firebaseKey]
-                                  ['email'],
+                              VigenereCipher.decrypt(
+                                  snapshot.data.snapshot
+                                      .val()[widget.firebaseKey]['email'],
+                                  'badriyah'),
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
@@ -99,8 +105,11 @@ class _DetailPesananState extends State<DetailPesanan> {
                             ),
                             Text('No Telepon'),
                             Text(
-                              snapshot.data.snapshot.val()[widget.firebaseKey]
-                                  ['no_handphone'],
+                              VigenereCipher.decrypt(
+                                  snapshot.data.snapshot
+                                          .val()[widget.firebaseKey]
+                                      ['no_handphone'],
+                                  'badriyah'),
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
@@ -109,8 +118,10 @@ class _DetailPesananState extends State<DetailPesanan> {
                             ),
                             Text('Tanggal'),
                             Text(
-                              snapshot.data.snapshot.val()[widget.firebaseKey]
-                                  ['date'],
+                              VigenereCipher.decrypt(
+                                  snapshot.data.snapshot
+                                      .val()[widget.firebaseKey]['date'],
+                                  'badriyah'),
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
@@ -119,8 +130,10 @@ class _DetailPesananState extends State<DetailPesanan> {
                             ),
                             Text('Alamat'),
                             Text(
-                              snapshot.data.snapshot.val()[widget.firebaseKey]
-                                  ['address'],
+                              VigenereCipher.decrypt(
+                                  snapshot.data.snapshot
+                                      .val()[widget.firebaseKey]['address'],
+                                  'badriyah'),
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
@@ -129,7 +142,7 @@ class _DetailPesananState extends State<DetailPesanan> {
                             ),
                             Text('Jumlah Pesanan'),
                             Text(
-                              '${snapshot.data.snapshot.val()[widget.firebaseKey]['team_amount']} Pcs',
+                              '${VigenereCipher.decrypt(snapshot.data.snapshot.val()[widget.firebaseKey]['team_amount'], 'badriyah')} Pcs',
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
@@ -140,14 +153,20 @@ class _DetailPesananState extends State<DetailPesanan> {
                             InkWell(
                               onTap: () async {
                                 js.context.callMethod("open", [
-                                  snapshot.data.snapshot
-                                      .val()[widget.firebaseKey]['team_player']
+                                  VigenereCipher.decrypt(
+                                      snapshot.data.snapshot
+                                              .val()[widget.firebaseKey]
+                                          ['team_player'],
+                                      'badriyah')
                                 ]);
                               },
                               child: Container(
                                 child: Text(
-                                  snapshot.data.snapshot
-                                      .val()[widget.firebaseKey]['team_player'],
+                                  VigenereCipher.decrypt(
+                                      snapshot.data.snapshot
+                                              .val()[widget.firebaseKey]
+                                          ['team_player'],
+                                      'badriyah'),
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -160,8 +179,11 @@ class _DetailPesananState extends State<DetailPesanan> {
                             ),
                             Text('Katalog Name'),
                             Text(
-                              snapshot.data.snapshot.val()[widget.firebaseKey]
-                                  ['catalog_name'],
+                              VigenereCipher.decrypt(
+                                  snapshot.data.snapshot
+                                          .val()[widget.firebaseKey]
+                                      ['catalog_name'],
+                                  'badriyah'),
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
@@ -171,9 +193,11 @@ class _DetailPesananState extends State<DetailPesanan> {
                             Text('Harga Satuan'),
                             Text(
                               Currency.setPrice(
-                                  value: snapshot.data.snapshot
-                                      .val()[widget.firebaseKey]['price']
-                                      .toString()),
+                                  value: VigenereCipher.decrypt(
+                                      snapshot.data.snapshot
+                                          .val()[widget.firebaseKey]['price']
+                                          .toString(),
+                                      'badriyah')),
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
@@ -183,9 +207,12 @@ class _DetailPesananState extends State<DetailPesanan> {
                             Text('Jumlah Total'),
                             Text(
                               Currency.setPrice(
-                                  value: snapshot.data.snapshot
-                                      .val()[widget.firebaseKey]['grand_total']
-                                      .toString()),
+                                  value: VigenereCipher.decrypt(
+                                      snapshot.data.snapshot
+                                          .val()[widget.firebaseKey]
+                                              ['grand_total']
+                                          .toString(),
+                                      'badriyah')),
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
@@ -201,7 +228,10 @@ class _DetailPesananState extends State<DetailPesanan> {
                               onChanged: (value) {
                                 setState(() {
                                   _konfirmasi = value;
-                                  ref.update({"purchase_status": "$value"});
+                                  ref.update({
+                                    "purchase_status":
+                                        "${VigenereCipher.encrypt(value, 'badriyah')}"
+                                  });
                                 });
                               },
                             )
@@ -218,13 +248,17 @@ class _DetailPesananState extends State<DetailPesanan> {
                           InkWell(
                             onTap: () async {
                               js.context.callMethod("open", [
-                                snapshot.data.snapshot.val()[widget.firebaseKey]
-                                    ['team_logo']
+                                VigenereCipher.decrypt(
+                                    snapshot.data.snapshot
+                                        .val()[widget.firebaseKey]['team_logo'],
+                                    'badriyah')
                               ]);
                             },
                             child: Image.network(
-                              snapshot.data.snapshot.val()[widget.firebaseKey]
-                                  ['team_logo'],
+                              VigenereCipher.decrypt(
+                                  snapshot.data.snapshot
+                                      .val()[widget.firebaseKey]['team_logo'],
+                                  'badriyah'),
                               width: MediaQuery.of(context).size.width / 5,
                             ),
                           ),
@@ -243,15 +277,19 @@ class _DetailPesananState extends State<DetailPesanan> {
                               : InkWell(
                                   onTap: () async {
                                     js.context.callMethod("open", [
-                                      snapshot.data.snapshot
-                                              .val()[widget.firebaseKey]
-                                          ['team_sponsor']
+                                      VigenereCipher.decrypt(
+                                          snapshot.data.snapshot
+                                                  .val()[widget.firebaseKey]
+                                              ['team_sponsor'],
+                                          'badriyah')
                                     ]);
                                   },
                                   child: Image.network(
-                                    snapshot.data.snapshot
-                                            .val()[widget.firebaseKey]
-                                        ['team_sponsor'],
+                                    VigenereCipher.decrypt(
+                                        snapshot.data.snapshot
+                                                .val()[widget.firebaseKey]
+                                            ['team_sponsor'],
+                                        'badriyah'),
                                     width:
                                         MediaQuery.of(context).size.width / 5,
                                   ),
@@ -259,6 +297,35 @@ class _DetailPesananState extends State<DetailPesanan> {
                           SizedBox(
                             height: 8,
                           ),
+                          Text(
+                            'Bukti Pembayaran',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          snapshot.data.snapshot.val()[widget.firebaseKey]
+                                      ['purchase_photo'] ==
+                                  'null'
+                              ? Text('---')
+                              : InkWell(
+                                  onTap: () async {
+                                    js.context.callMethod("open", [
+                                      VigenereCipher.decrypt(
+                                          snapshot.data.snapshot
+                                                  .val()[widget.firebaseKey]
+                                              ['purchase_photo'],
+                                          'badriyah')
+                                    ]);
+                                  },
+                                  child: Image.network(
+                                    VigenereCipher.decrypt(
+                                        snapshot.data.snapshot
+                                                .val()[widget.firebaseKey]
+                                            ['purchase_photo'],
+                                        'badriyah'),
+                                    width:
+                                        MediaQuery.of(context).size.width / 5,
+                                  ),
+                                ),
                         ],
                       )
                     ],

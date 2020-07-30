@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase/firebase.dart' as fb;
 
+import 'core/vigenerecipher.dart';
 import 'detailpesanan.dart';
 
 class Member extends StatefulWidget {
@@ -66,15 +67,21 @@ class _MemberState extends State<Member> {
                             padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
                             child: Card(
                               child: ListTile(
-                                title: Text(map.values
-                                        .toList()[index]['first_name']
-                                        .toString() +
+                                title: Text(VigenereCipher.decrypt(
+                                        map.values
+                                            .toList()[index]['first_name']
+                                            .toString(),
+                                        'badriyah') +
+                                    VigenereCipher.decrypt(
+                                        map.values
+                                            .toList()[index]['last_name']
+                                            .toString(),
+                                        'badriyah')),
+                                subtitle: Text(VigenereCipher.decrypt(
                                     map.values
-                                        .toList()[index]['last_name']
-                                        .toString()),
-                                subtitle: Text(map.values
-                                    .toList()[index]['email']
-                                    .toString()),
+                                        .toList()[index]['email']
+                                        .toString(),
+                                    'badriyah')),
                                 onTap: () {
                                   // debugPrint(key[index].toString());
                                   // Navigator.push(

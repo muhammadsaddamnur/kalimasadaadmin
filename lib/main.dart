@@ -1,5 +1,7 @@
 import 'package:firebase/firebase.dart' as fb;
 import 'package:flutter/material.dart';
+import 'package:kalimasadaadmin/login.dart';
+import 'package:kalimasadaadmin/testvigenere.dart';
 
 import 'home.dart';
 
@@ -45,7 +47,8 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Home(),
+      home: Login(),
+      routes: {TestVigenere.route: (context) => TestVigenere()},
     );
   }
 }

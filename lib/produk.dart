@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase/firebase.dart' as fb;
+import 'package:kalimasadaadmin/core/vigenerecipher.dart';
 import 'package:kalimasadaadmin/detailproduk.dart';
 
 import 'detailpesanan.dart';
@@ -49,11 +50,13 @@ class _ProdukState extends State<Produk> {
                       child: Text('Tambah'),
                       onPressed: () async {
                         await ref.push().set({
-                          "harga": 0,
+                          "harga": VigenereCipher.encrypt('0', 'badriyah'),
                           "material": "",
                           "nama": "",
                           "image": [
-                            'https://firebasestorage.googleapis.com/v0/b/namdua-d4db2.appspot.com/o/image%2Flogo3.jpg?alt=media&token=776b24ac-d7b8-44e6-a7f3-9e616c34f3c6'
+                            VigenereCipher.encrypt(
+                                'https://firebasestorage.googleapis.com/v0/b/namdua-d4db2.appspot.com/o/image%2Flogo3.jpg?alt=media&token=776b24ac-d7b8-44e6-a7f3-9e616c34f3c6',
+                                'badriyah')
                           ],
                           "note": "",
                           "kategori": ""
@@ -67,16 +70,22 @@ class _ProdukState extends State<Produk> {
                             padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
                             child: Card(
                               child: ListTile(
-                                title: Text(map.values
-                                    .toList()[index]['nama']
-                                    .toString()),
-                                subtitle: Text(map.values
-                                        .toList()[index]['kategori']
-                                        .toString() +
-                                    ' - ' +
+                                title: Text(VigenereCipher.decrypt(
                                     map.values
-                                        .toList()[index]['material']
-                                        .toString()),
+                                        .toList()[index]['nama']
+                                        .toString(),
+                                    'badriyah')),
+                                subtitle: Text(VigenereCipher.decrypt(
+                                        map.values
+                                            .toList()[index]['kategori']
+                                            .toString(),
+                                        'badriyah') +
+                                    ' - ' +
+                                    VigenereCipher.decrypt(
+                                        map.values
+                                            .toList()[index]['material']
+                                            .toString(),
+                                        'badriyah')),
                                 onTap: () {
                                   debugPrint(key[index].toString());
                                   Navigator.push(

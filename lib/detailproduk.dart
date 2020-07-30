@@ -5,6 +5,8 @@ import 'package:mime_type/mime_type.dart';
 import 'package:path/path.dart' as Path;
 import 'package:universal_html/prefer_universal/html.dart' as html;
 
+import 'core/vigenerecipher.dart';
+
 class DetailProduk extends StatefulWidget {
   final dynamic firebaseKey;
   DetailProduk({this.firebaseKey});
@@ -34,13 +36,18 @@ class _DetailProdukState extends State<DetailProduk> {
     ref.onValue.listen((event) {
       var datasnapshot = event.snapshot;
       testa = datasnapshot;
-      name.text = testa.val()["nama"].toString();
-      kategori.text = testa.val()["kategori"].toString();
-      material.text = testa.val()["material"].toString();
-      harga.text = testa.val()["harga"].toString();
-      note.text = testa.val()["note"].toString();
+      name.text =
+          VigenereCipher.decrypt(testa.val()["nama"].toString(), 'badriyah');
+      kategori.text = VigenereCipher.decrypt(
+          testa.val()["kategori"].toString(), 'badriyah');
+      material.text = VigenereCipher.decrypt(
+          testa.val()["material"].toString(), 'badriyah');
+      harga.text =
+          VigenereCipher.decrypt(testa.val()["harga"].toString(), 'badriyah');
+      note.text =
+          VigenereCipher.decrypt(testa.val()["note"].toString(), 'badriyah');
 
-      debugPrint(testa.val()["purchase_status"].toString());
+      // debugPrint(testa.val()["purchase_status"].toString());
     });
   }
 
@@ -93,7 +100,8 @@ class _DetailProdukState extends State<DetailProduk> {
                                       .getDownloadURL();
                                   List<dynamic> list = snapshot.data.snapshot
                                       .val()[widget.firebaseKey]["image"];
-                                  list.add(imageUri.toString());
+                                  list.add(VigenereCipher.encrypt(
+                                      imageUri.toString(), 'badriyah'));
                                   ref.update({"image": list});
                                 },
                                 child: Container(
@@ -108,9 +116,11 @@ class _DetailProdukState extends State<DetailProduk> {
                                 child: Stack(
                                   children: [
                                     Image.network(
-                                      snapshot.data.snapshot
-                                              .val()[widget.firebaseKey]
-                                          ["image"][index],
+                                      VigenereCipher.decrypt(
+                                          snapshot.data.snapshot
+                                                  .val()[widget.firebaseKey]
+                                              ["image"][index],
+                                          'badriyah'),
                                       width: 200,
                                       height: 200,
                                       fit: BoxFit.fill,
@@ -225,11 +235,16 @@ class _DetailProdukState extends State<DetailProduk> {
                           });
                           Future.delayed(Duration(seconds: 1));
                           ref.update({
-                            "harga": harga.text,
-                            "kategori": kategori.text,
-                            "material": material.text,
-                            "nama": name.text,
-                            "note": note.text,
+                            "harga":
+                                VigenereCipher.encrypt(harga.text, 'badriyah'),
+                            "kategori": VigenereCipher.encrypt(
+                                kategori.text, 'badriyah'),
+                            "material": VigenereCipher.encrypt(
+                                material.text, 'badriyah'),
+                            "nama":
+                                VigenereCipher.encrypt(name.text, 'badriyah'),
+                            "note":
+                                VigenereCipher.encrypt(note.text, 'badriyah'),
                           });
                           setState(() {
                             loading = false;
