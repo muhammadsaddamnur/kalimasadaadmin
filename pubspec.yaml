@@ -28,6 +28,9 @@ dependencies:
   universal_html: ^1.2.3
   image_picker_web: ^1.0.9
   mime_type: ^0.3.2
+  toast: ^0.1.5
+  characters: ^1.0.0
+  shared_preferences: ^0.5.8
   flutter:
     sdk: flutter
 

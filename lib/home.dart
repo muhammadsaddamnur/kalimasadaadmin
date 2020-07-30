@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase/firebase.dart' as fb;
 import 'package:kalimasadaadmin/detailpesanan.dart';
 import 'package:kalimasadaadmin/listpesanan.dart';
+import 'package:kalimasadaadmin/login.dart';
 import 'package:kalimasadaadmin/member.dart';
 import 'package:kalimasadaadmin/produk.dart';
 import 'package:kalimasadaadmin/tambahproduk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -16,8 +18,18 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
+    checkLogin();
     super.initState();
     // init();
+  }
+
+  checkLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('email') == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => Login()),
+          (Route<dynamic> route) => false);
+    }
   }
 
   // init() {
@@ -46,7 +58,15 @@ class _HomeState extends State<Home> {
         children: [
           NavigationRail(
             selectedIndex: _selectedIndex,
-            onDestinationSelected: (int index) {
+            onDestinationSelected: (int index) async {
+              if (index == 3) {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.remove('email');
+
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => Login()),
+                    (Route<dynamic> route) => false);
+              }
               setState(() {
                 _selectedIndex = index;
               });
